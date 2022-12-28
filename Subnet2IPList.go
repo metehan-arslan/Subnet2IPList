@@ -10,17 +10,17 @@ import (
 	"regexp"
 )
 
-var(
-Reset  = "\033[0m"
-Black  = "\033[30m"
-Red    = "\033[31m"
-Green  = "\033[32m"
-Yellow = "\033[33m"
-Blue   = "\033[34m"
-Purple = "\033[35m"
-Cyan   = "\033[36m"
-Gray   = "\033[37m"
-White  = "\033[97m"
+var (
+	Reset  = "\033[0m"
+	Black  = "\033[30m"
+	Red    = "\033[31m"
+	Green  = "\033[32m"
+	Yellow = "\033[33m"
+	Blue   = "\033[34m"
+	Purple = "\033[35m"
+	Cyan   = "\033[36m"
+	Gray   = "\033[37m"
+	White  = "\033[97m"
 )
 
 const (
@@ -69,6 +69,7 @@ func displayIPs(subnet string) {
 
 	ipAddr, ipNet, err := net.ParseCIDR(subnet)
 	if err != nil {
+		fmt.Println(subnet)
 		log.Print(err)
 		return
 	}
@@ -77,7 +78,7 @@ func displayIPs(subnet string) {
 		addresses = append(addresses, ip.String())
 	}
 
-	for _, ip := range addresses[0 : len(addresses)] {
+	for _, ip := range addresses[0:len(addresses)] {
 		fmt.Println(ip)
 	}
 }
@@ -93,12 +94,11 @@ func increment(ip net.IP) {
 
 func usage() {
 	fmt.Fprintf(os.Stderr, "._______________________________________________________________.\n")
-	fmt.Fprintf(os.Stderr, "|" + Green + "Instructions: " + Yellow + "$" + White + "./Subnet2IPList <subnet>" + Reset + "                             |\n")
-	fmt.Fprintf(os.Stderr, "|         " + Gray + "or" + Reset + "                                                 |\n")
-	fmt.Fprintf(os.Stderr, "|         " + Yellow + "$" + White + "cat subnet-list.txt | ./Subnet2IPList" + Reset + "                |\n")
-	fmt.Fprintf(os.Stderr, "|         " + Gray + "else" + Reset + "                                   |\n")
-	fmt.Fprintf(os.Stderr, "|         " + Yellow + "$" + White + "cat subnet-list.txt | ./Subnet2IPList > out.txt" + Reset + "      |\n")
+	fmt.Fprintf(os.Stderr, "|"+Green+"Instructions: "+Yellow+"$"+White+"./Subnet2IPList <subnet>"+Reset+"                        |\n")
+	fmt.Fprintf(os.Stderr, "|         "+Gray+"or"+Reset+"                                                    |\n")
+	fmt.Fprintf(os.Stderr, "|         "+Yellow+"$"+White+"cat subnet-list.txt | ./Subnet2IPList"+Reset+"                |\n")
+	fmt.Fprintf(os.Stderr, "|         "+Gray+"else"+Reset+"                                                  |\n")
+	fmt.Fprintf(os.Stderr, "|         "+Yellow+"$"+White+"cat subnet-list.txt | ./Subnet2IPList > out.txt"+Reset+"      |\n")
 	fmt.Fprintf(os.Stderr, "`---------------------------------------------------------------`\n")
-	fmt.Fprintf(os.Stderr, Cyan + "nota bene:" + Reset + "No IPv6 or DNS allowed >:(\n")
- }
-
+	fmt.Fprintf(os.Stderr, Cyan+"nota bene:"+Reset+"No extra witespaces, IPv6 or DNS allowed >:(\n")
+}
