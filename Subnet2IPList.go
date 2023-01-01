@@ -23,7 +23,8 @@ var (
 )
 
 const (
-	IPRegex = `\b(?:\d{1,3}\.){3}\d{1,3}\b$`
+	IPRegex    = `\b(?:\d{1,3}\.){3}\d{1,3}\b$`
+	RangeRegex = `\-`
 )
 
 func main() {
@@ -47,6 +48,11 @@ func main() {
 	}
 }
 
+func isIPRange(subnet string) bool {
+	match, _ := regexp.MatchString(RangeRegex, subnet)
+	return match
+}
+
 func isIPAddr(subnet string) bool {
 	match, _ := regexp.MatchString(IPRegex, subnet)
 	return match
@@ -55,7 +61,10 @@ func isIPAddr(subnet string) bool {
 func displayIPs(subnet string) {
 	var addresses []string
 
-	if isIPAddr(subnet) {
+	if isIPRange(subnet) && isIPAddr(subnet) {
+		fmt.Println(subnet)
+		return
+	} else if isIPAddr(subnet) {
 		fmt.Println(subnet)
 		return
 	}
