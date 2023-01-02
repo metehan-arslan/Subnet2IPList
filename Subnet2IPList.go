@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"flag"
 	"fmt"
 	"log"
@@ -30,14 +31,18 @@ const (
 func main() {
 	flag.Usage = usage
 	flag.Parse()
-	_, err := os.Stdin.Stat()
-
+	info, err := os.Stdin.Stat()
 	if err != nil {
 		log.Fatal(err)
 	}
 	args := os.Args[1:]
 
-	if len(args) > 0 {
+	if info.Mode()&os.ModeNamedPipe != 0 {
+		scanner := bufio.NewScanner(os.Stdin)
+		for scanner.Scan() {
+			displayIPs(scanner.Text())
+		}
+	} else if len(args) > 0 {
 		var subnets []string
 		subnets = args
 		for _, subnet := range subnets {
@@ -102,5 +107,5 @@ func usage() {
 	fmt.Fprintf(os.Stderr, "|         "+Gray+"else"+Reset+"                                                  |\n")
 	fmt.Fprintf(os.Stderr, "|         "+Yellow+"$"+White+"cat subnet-list.txt | ./Subnet2IPList > out.txt"+Reset+"      |\n")
 	fmt.Fprintf(os.Stderr, "`---------------------------------------------------------------`\n")
-	fmt.Fprintf(os.Stderr, Cyan+"nota bene:"+Reset+"No extra whitespaces, IPv6 or DNS allowed >:(\n")
+	fmt.Fprintf(os.Stderr, Cyan+"nota bene:"+Reset+"No extra whitespaces, IPv6 or DNS allowed >:(\n\n")
 }
